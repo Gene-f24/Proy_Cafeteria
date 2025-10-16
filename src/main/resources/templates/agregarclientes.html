@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Agregar Cliente</title>
+</head>
+<body>
+  <h1>Agregar Cliente</h1>
+  <form th:action="@{/clientes/guardar}" th:object="${cliente}" method="post">
+    <label>Nombre:</label>
+    <input type="text" th:field="*{nom_cli}" /><br/>
+    
+	<label>Tipo de doc:</label>
+	 	<select th:field="*{obj_tipodoc.id_tipodoc}">
+			 <option value="">Seleccione...</option>
+			 <option th:each="td : ${tiposdoc}"
+			 		 th:value="${td.id_tipodoc}"
+			 		 th:text="${td.nom_tipodoc}">
+			 </option>
+	 	</select>
+    <label>Nro de documento:</label>
+    <input type="text" th:field="*{nro_doc_cli}"/><br/>   
+    <br/>
+    <button type="submit">Guardar</button>
+  </form>
+</body>
+</html>
