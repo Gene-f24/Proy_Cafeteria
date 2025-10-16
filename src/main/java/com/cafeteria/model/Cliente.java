@@ -7,11 +7,13 @@ import lombok.Data;
 @Table(name = "tb_cliente")
 @Data
 public class Cliente {
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_cli;
     private String nom_cli;
-    private int id_tipodoc;
-    private String NroDoc_cli;
+    private String nro_doc_cli;
+    @ManyToOne
+    @JoinColumn(name = "id_tipodoc")
+    private TipoDoc obj_tipodoc;
+
 }
