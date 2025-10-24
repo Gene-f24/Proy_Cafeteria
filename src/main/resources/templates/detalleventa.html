@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Detalle de Venta</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="#">Cafetería</a>
+		<div class="collapse navbar-collapse">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item"><a class="nav-link" th:href="@{/home}">Inicio</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/clientes/cargarclientes}">Clientes</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/productos/cargarproductos}">Productos</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/ventas/nuevo}">Ventas</a></li>
+			</ul>
+		</div>
+	</nav>
+	<div class="container mt-4">
+		<h2>Detalle de Venta</h2>
+
+		<!-- Datos de la venta -->
+		<div class="row mb-3">
+			<div class="col-md-6">
+				<p><strong>Id Venta:</strong> <span th:text="${venta.idVenta}"></span></p>
+				<p><strong>Fecha:</strong> <span th:text="${venta.fecha}"></span></p>
+			</div>
+			<div class="col-md-6">
+				<p><strong>Cliente:</strong> <span
+						th:text="${venta.obj_cli != null ? venta.obj_cli.nom_cli : '---'}"></span></p>
+				<p><strong>Subtotal:</strong> <span
+						th:text="${'S/ ' + #numbers.formatDecimal(venta.subtotal,1,'COMMA',2,'POINT')}"></span></p>
+				<p><strong>IGV:</strong> <span
+						th:text="${'S/ ' + #numbers.formatDecimal(venta.igv,1,'COMMA',2,'POINT')}"></span></p>
+				<p><strong>Total:</strong> <span
+						th:text="${'S/ ' + #numbers.formatDecimal(venta.total,1,'COMMA',2,'POINT')}"></span></p>
+			</div>
+		</div>
+
+		<!-- Formulario para agregar productos -->
+		<div class="row mb-4">
+			<div class="col-md-12">
+				<div class="card p-3 border-0 shadow-sm">
+					<div class="card-body">
+						<h5 class="card-title mb-3 text-secondary">Agregar producto a la venta</h5>
+
+						<form th:action="@{/ventas/detalle/agregarproducto}" th:object="${nuevoDetalle}" method="post"
+							class="form-row align-items-end">
+
+							<!-- Campo oculto -->
+							<input type="hidden" name="idVenta" th:value="${venta.idVenta}" />
+
+							<div class="form-group col-md-6">
+								<label class="font-weight-bold">Producto:</label>
+								<select th:field="*{id_prod}" class="form-control" required>
+									<option value="" disabled selected>-- Seleccione un producto --</option>
+									<option th:each="p : ${lstProductos}" th:value="${p.id_prod}"
+										th:text="${p.des_prod}"></option>
+								</select>
+							</div>
+
+							<div class="form-group col-md-3">
+								<label class="font-weight-bold">Cantidad:</label>
+								<input type="number" th:field="*{cantidad}" class="form-control" min="1" value="1"
+									required />
+							</div>
+
+							<div class="form-group col-md-3 text-right">
+								<button type="submit" class="btn btn-primary w-100">
+									Agregar producto
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Tabla de detalles -->
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table table-bordered">
+					<thead class="thead-light">
+						<tr>
+							<th>Id Detalle</th>
+							<th>Producto</th>
+							<th>Cantidad</th>
+							<th>Precio Unitario</th>
+							<th>Subtotal</th>
+							<th>Opciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="d : ${lstDetalles}">
+							<td th:text="${d.idDetalle}"></td>
+							<td th:text="${d.obj_prod != null ? d.obj_prod.des_prod : '---'}"></td>
+							<td th:text="${d.cantidad}"></td>
+							<td th:text="${'S/ ' + #numbers.formatDecimal(d.precio_unitario,1,'COMMA',2,'POINT')}"></td>
+							<td th:text="${'S/ ' + #numbers.formatDecimal(d.subtotal,1,'COMMA',2,'POINT')}"></td>
+							<td>
+								<a th:href="@{/ventas/detalle/eliminar/{idDetalle}(idDetalle=${d.idDetalle})}"
+									class="btn btn-danger btn-sm">Eliminar</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<!-- Botón volver -->
+		<div class="row mt-3">
+			<div class="col-md-12">
+				<a th:href="@{/ventas/cargarventas}" class="btn btn-secondary">Volver a Ventas</a>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
+</body>
+
+</html>

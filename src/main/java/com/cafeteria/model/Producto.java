@@ -14,4 +14,10 @@ public class Producto {
     private String stk_prod;
     private Double pre_prod;
     private int id_categ;
+    //est
+    //Join
+    @ManyToOne
+    @JoinColumn(name="id_categ",
+    	insertable = false, updatable = false)
+    private Categoria obj_cat;
 }

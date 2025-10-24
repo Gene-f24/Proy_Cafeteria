@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Agregar Producto</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="#">Cafetería</a>
+		<div class="collapse navbar-collapse">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item"><a class="nav-link" th:href="@{/home}">Inicio</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/clientes/cargarclientes}">Clientes</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/productos/cargarproductos}">Productos</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/ventas/nuevo}">Ventas</a></li>
+			</ul>
+		</div>
+	</nav>
+	<div class="container mt-5">
+		
+		<div class="row justify-content-center">
+			<div class="col-md-6">
+			<div class="card shadow-sm p-4">
+			<h4 class="text-center mb-4">Agregar Producto</h4>
+				<form th:action="@{/productos/guardar}" th:object="${producto}" method="post">
+					<div class="form-group">
+						<label for="inputNom">Descripción</label>
+						<input type="text" th:field="*{des_prod}"
+						class="form-control" id="inputNom" placeholder="Nombre">
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<label for="inputStk">Stock</label>
+							<input type="number" th:field="*{stk_prod}" class="form-control" id="inputStk" placeholder="0">
+						</div>
+						<div class="form-group col-md-6">
+							<label for="inputPrec">Precio</label>
+							<input type="number" step="0.01" th:field="*{pre_prod}"
+							class="form-control" id="inputPrec" placeholder="0.00">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="inputCat">Categoría</label>
+							<select th:field="*{id_categ}" id="inputCat" class="form-control">
+								<option value="-1">Seleccione...</option>
+								<option th:each="c : ${lstCategorias}" 
+										th:text="${c.des_categ}"
+										th:value="${c.id_categ}"></option>
+							</select>
+						</div>
+					</div>
+					<button type="submit" class="btn btn-primary">Guardar</button>
+					<a th:href="@{/productos/cargarproductos}" class="btn btn-secondary">Cancelar</a>
+				</form>
+				<div th:text="${mensaje}"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" ></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" ></script>
+</html>

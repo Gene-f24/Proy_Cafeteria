@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import com.cafeteria.model.Cliente;
 @Repository
-public interface ClienteRepository extends JpaRepository<Cliente, Integer>{
+public interface IClienteRepository extends JpaRepository<Cliente, Integer>{
 
 }

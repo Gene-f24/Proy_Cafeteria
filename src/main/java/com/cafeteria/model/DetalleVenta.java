@@ -1,5 +1,6 @@
 package com.cafeteria.model;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,14 +16,25 @@ import lombok.Data;
 public class DetalleVenta {
 	 	@Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private int id_detalleventa;
-	    @ManyToOne
-	    @JoinColumn(name = "id_venta")
-	    private Venta venta;
-	    @ManyToOne
-	    @JoinColumn(name = "id_prod")
-	    private Producto producto;
+	 	@Column(name = "id_detalleventa")
+	    private int idDetalle;
+	 	//Para guardar y editar desde formularios
+	 	@Column(name="id_venta")
+	 	private Integer idVenta;
+	 	private Integer id_prod;
 	    private int cantidad;
 	    private Double precio_unitario;
 	    private Double subtotal;
+	 	
+	 	//est
+	    @ManyToOne
+	    @JoinColumn(name = "id_venta", insertable = false, updatable = false)
+	    private Venta objVenta;
+
+	    @ManyToOne
+	    @JoinColumn(name = "id_prod", insertable = false, updatable = false)
+	    private Producto obj_prod;
+	    //est
+	
+	  
 }
