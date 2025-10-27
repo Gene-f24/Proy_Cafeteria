@@ -17,12 +17,18 @@
 				<li class="nav-item"><a class="nav-link" th:href="@{/productos/cargarproductos}">Productos</a></li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/ventas/nuevo}">Ventas</a></li>
 			</ul>
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<a th:href="@{/logout}" class="btn btn-danger btn-sm">Cerrar sesión</a>
+				</li>
+			</ul>
 		</div>
 	</nav>
 
 	<div class="container mt-2"> <br>
 		<h4>Lista de Clientes Registrados</h4><br>
 		<a th:href="@{/clientes/nuevo}" class="btn btn-primary">Agregar nuevo cliente</a>
+		<a th:href="@{/home}" class="btn btn-secondary">Volver</a>
 		<div class="row">
 			<div class="col-6 col-sm-7">
 				<h3></h3>

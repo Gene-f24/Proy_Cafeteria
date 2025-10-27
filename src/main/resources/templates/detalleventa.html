@@ -17,6 +17,11 @@
 				<li class="nav-item"><a class="nav-link" th:href="@{/productos/cargarproductos}">Productos</a></li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/ventas/nuevo}">Ventas</a></li>
 			</ul>
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<a th:href="@{/logout}" class="btn btn-danger btn-sm">Cerrar sesión</a>
+				</li>
+			</ul>
 		</div>
 	</nav>
 	<div class="container mt-4">
@@ -26,11 +31,11 @@
 		<div class="row mb-3">
 			<div class="col-md-6">
 				<p><strong>Id Venta:</strong> <span th:text="${venta.idVenta}"></span></p>
-				<p><strong>Fecha:</strong> <span th:text="${venta.fecha}"></span></p>
+				<p><strong>Fecha:</strong> <span th:text="${#temporals.format(venta.fecha, 'dd/MM/yyyy HH:mm')}"></span></p>
 			</div>
 			<div class="col-md-6">
 				<p><strong>Cliente:</strong> <span
-						th:text="${venta.obj_cli != null ? venta.obj_cli.nom_cli : '---'}"></span></p>
+						th:text="${venta.nroDocCli}"></span></p>
 				<p><strong>Subtotal:</strong> <span
 						th:text="${'S/ ' + #numbers.formatDecimal(venta.subtotal,1,'COMMA',2,'POINT')}"></span></p>
 				<p><strong>IGV:</strong> <span
@@ -101,7 +106,9 @@
 							<td th:text="${'S/ ' + #numbers.formatDecimal(d.precio_unitario,1,'COMMA',2,'POINT')}"></td>
 							<td th:text="${'S/ ' + #numbers.formatDecimal(d.subtotal,1,'COMMA',2,'POINT')}"></td>
 							<td>
-								<a th:href="@{/ventas/detalle/eliminar/{idDetalle}(idDetalle=${d.idDetalle})}"
+								<a th:href="@{/ventas/detalle/editar/}+${d.idDetalle}" 
+								class="btn btn-warning btn-sm mr-1">Editar</a>		
+								<a th:href="@{/ventas/detalle/eliminar} + ${d.idDetalle}"
 									class="btn btn-danger btn-sm">Eliminar</a>
 							</td>
 						</tr>

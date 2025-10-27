@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Cafetería</title>
+  <title>Registro de Cuenta</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
@@ -15,16 +15,16 @@
       margin: 0;
     }
 
-    .login-container {
+    .register-container {
       background-color: #fff;
       padding: 60px 50px;
       border-radius: 15px;
       box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-      width: 450px;
+      width: 480px;
       text-align: left;
     }
 
-    .login-container h1 {
+    .register-container h1 {
       text-align: center;
       margin-bottom: 35px;
       color: #3e2723;
@@ -32,7 +32,7 @@
       font-weight: 600;
     }
 
-    .login-container label {
+    .register-container label {
       display: block;
       margin-bottom: 8px;
       font-weight: 500;
@@ -40,7 +40,7 @@
       font-size: 18px;
     }
 
-    .login-container .form-control {
+    .register-container .form-control {
       padding: 14px;
       margin-bottom: 20px;
       border: 1px solid #ccc;
@@ -48,7 +48,7 @@
       font-size: 18px;
     }
 
-    .login-container .btn-primary {
+    .register-container .btn-primary {
       width: 100%;
       padding: 14px;
       background-color: #3e2723;
@@ -61,23 +61,23 @@
       transition: background 0.3s ease;
     }
 
-    .login-container .btn-primary:hover {
+    .register-container .btn-primary:hover {
       background-color: #5d4037;
     }
 
-    .login-container p {
+    .register-container p {
       font-size: 16px;
       margin-top: 25px;
       text-align: center;
     }
 
-    .login-container a {
+    .register-container a {
       color: #3e2723;
       text-decoration: none;
       font-weight: 600;
     }
 
-    .login-container a:hover {
+    .register-container a:hover {
       text-decoration: underline;
     }
 
@@ -89,25 +89,40 @@
   </style>
 </head>
 <body>
-  <div class="login-container">
-    <h1>Acceso al Sistema</h1>
-    <form action="/login" method="post">
+  <div class="register-container">
+    <h1>Registro de Cuenta</h1>
+    <form th:action="@{/registro/guardar}" th:object="${usuarios}" method="post">
       <div class="mb-3">
-        <label for="" class="form-label">Usuario</label>
-        <input type="email" name="txtUsuario" class="form-control" id="">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input type="text" th:field="*{nom_usua}" class="form-control" id="nombre" required>
       </div>
+
       <div class="mb-3">
-        <label for="" class="form-label">Contraseña</label>
-        <input type="password" name="txtClave" class="form-control" id="">
+        <label for="apellido" class="form-label">Apellido</label>
+        <input type="text" th:field="*{ape_usua}" class="form-control" id="apellido" required>
       </div>
+
       <div class="mb-3">
-        <button type="submit" class="btn btn-primary">Ingresar</button>
+        <label for="correo" class="form-label">Usuario</label>
+        <input type="email" th:field="*{correo}" class="form-control" id="correo" required>
       </div>
+
       <div class="mb-3">
-        <p>Para registrar su cuenta, pulse <a th:href="@{/registro/cargarregistro}">aquí</a></p>
+        <label for="clave" class="form-label">Contraseña</label>
+        <input type="password" th:field="*{clave}" class="form-control" id="clave" required>
       </div>
+	  
+	  <input type="hidden" th:field="*{idtipousua}" value="2">
+
+      <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Registrar</button>
+      </div>
+
+      <div class="mb-3">
+        <p>¿Ya tienes una cuenta? <a href="/login">Inicia sesión aquí</a></p>
+      </div>
+
       <div role="alert" th:class="${cssmensaje}" th:text="${mensaje}"></div>
-      <br>
     </form>
   </div>
 

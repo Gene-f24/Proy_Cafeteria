@@ -17,6 +17,11 @@
 				<li class="nav-item"><a class="nav-link" th:href="@{/productos/cargarproductos}">Productos</a></li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/ventas/nuevo}">Ventas</a></li>
 			</ul>
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<a th:href="@{/logout}" class="btn btn-danger btn-sm">Cerrar sesión</a>
+				</li>
+			</ul>
 		</div>
 	</nav>
 
@@ -40,8 +45,8 @@
 					<tbody>
 						<tr th:each="v : ${lstVentas}">
 							<th scope="row" th:text="${v.idVenta}"></th>
-							<td th:text="${v.fecha}"></td>
-							<td th:text="${v.obj_cli != null ? v.obj_cli.nom_cli : '---'}"></td>
+							<td th:text="${#temporals.format(v.fecha, 'dd/MM/yyyy HH:mm')}"></span>></td>
+							<td th:text="${v.nroDocCli}"></td>
 							<td th:text="${'S/'} + ${#numbers.formatDecimal(v.subtotal,1,'COMMA',2,'POINT')}"></td>
 							<td th:text="${'S/'} + ${#numbers.formatDecimal(v.igv,1,'COMMA',2,'POINT')}"></td>
 							<td th:text="${'S/'} + ${#numbers.formatDecimal(v.total,1,'COMMA',2,'POINT')}"></td>

@@ -71,7 +71,7 @@ public class ProductoController {
 	
 	//Eliminar Producto
 	@GetMapping("/eliminar/{id_prod}")
-	public String EliminarCliente(@PathVariable("id_prod") Integer id_prod) {
+	public String EliminarCliente(@PathVariable Integer id_prod) {
 		repoProd.deleteById(id_prod);
 		
 		return "redirect:/productos/cargarproductos";

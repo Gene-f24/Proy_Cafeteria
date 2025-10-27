@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>Editar Clientes</title>
+	<title>Editar Detalle de Venta</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
 </head>
@@ -15,7 +15,7 @@
 				<li class="nav-item"><a class="nav-link" th:href="@{/home}">Inicio</a></li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/clientes/cargarclientes}">Clientes</a></li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/productos/cargarproductos}">Productos</a></li>
-				<li class="nav-item"><a class="nav-link" th:href="@{/ventas/nuevo}">Ventas</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/ventas/cargarventas}">Ventas</a></li>
 			</ul>
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
@@ -24,54 +24,61 @@
 			</ul>
 		</div>
 	</nav>
+
 	<div class="container mt-5">
 		<div class="row justify-content-center">
 			<div class="col-md-6">
 				<div class="card shadow-lg border-1 rounded-lg">
 					<div class="card-header bg-primary text-white text-center">
-
-						<h4>Editar Clientes</h4>
+						<h4>Editar Detalle de Venta</h4>
 					</div>
+
 					<div class="card-body">
-						<form th:action="@{/clientes/guardar}" th:object="${cliente}" method="post">
+						<form th:action="@{/ventas/detalle/actualizar}" th:object="${detalle}" method="post">
+
+							<!-- ID del detalle (solo lectura) -->
 							<div class="form-group">
-								<label for="inputCod">Código</label>
-								<input type="text" th:field="*{idCli}" class="form-control" id="inputCod" readonly>
-							</div>
-							<div class="form-group">
-								<label for="inputNom">Nombre</label>
-								<input type="text" th:field="*{nom_cli}" class="form-control" id="inputNom"
-									placeholder="Nombre">
-							</div>
-							<div class="form-row">
-								<div class="form-group col-md-4">
-									<label for="inputTipodoc">Tipo de doc</label>
-									<select th:field="*{id_tipodoc}" id="inputTipodoc" class="form-control">
-										<option value="-1">Seleccione...</option>
-										<option th:each="td : ${lstTipodoc}" th:text="${td.nom_tipodoc}"
-											th:value="${td.id_tipodoc}">Seleccione...
-										</option>
-									</select>
-								</div>
-							</div>
-							<div class="form-row">
-								<div class="form-group col-md-6">
-									<label for="inputNumdoc">Nro de documento</label>
-									<input type="text" th:field="*{nro_doc_cli}" class="form-control" id="inputNumdoc"
-										placeholder="0">
-								</div>
+								<label for="inputIdDetalle">ID Detalle</label>
+								<input type="text" th:field="*{idDetalle}" class="form-control" id="inputIdDetalle"
+									readonly>
 							</div>
 
-							<button type="submit" class="btn btn-primary">Guardar</button>
-							<a th:href="@{/clientes/cargarclientes}" class="btn btn-secondary">Cancelar</a>
+							<!-- Campo oculto para idVenta -->
+							<input type="hidden" th:field="*{idVenta}" />
+
+							<!-- Producto -->
+							<div class="form-group">
+								<label for="inputProducto">Producto</label>
+								<select th:field="*{id_prod}" id="inputProducto" class="form-control" required>
+									<option value="-1">Seleccione un producto...</option>
+									<option th:each="p : ${lstProductos}" th:value="${p.id_prod}"
+										th:text="${p.des_prod}"></option>
+								</select>
+							</div>
+
+							<!-- Cantidad -->
+							<div class="form-group">
+								<label for="inputCantidad">Cantidad</label>
+								<input type="number" th:field="*{cantidad}" class="form-control" id="inputCantidad"
+									min="1" required>
+							</div>
+
+							<!-- Botones -->
+							<div class="text-center mt-4">
+								<button type="submit" class="btn btn-primary">Guardar Cambios</button>
+								<a th:href="@{/ventas/cargarventas}" class="btn btn-secondary">Cancelar</a>
+							</div>
+
 						</form>
-						<span th:text="${mensaje}"></span>
+
+						<div class="text-success mt-3" th:text="${mensaje}"></div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </body>
+
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
