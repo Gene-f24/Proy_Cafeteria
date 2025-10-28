@@ -12,10 +12,16 @@
 		<a class="navbar-brand" href="#">Cafetería</a>
 		<div class="collapse navbar-collapse">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item"><a class="nav-link" th:href="@{/home}">Inicio</a></li>
+				<li class="nav-item"><a class="nav-link"
+						th:href="${session.usuarioLogueado.idtipousua == 1} ? @{/admin/home} : @{/vend/home}">Inicio</a>
+				</li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/clientes/cargarclientes}">Clientes</a></li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/productos/cargarproductos}">Productos</a></li>
-				<li class="nav-item"><a class="nav-link" th:href="@{/ventas/nuevo}">Ventas</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/ventas/cargarventas}">Ventas</a></li>
+				<li class="nav-item"
+					th:if="${session.usuarioLogueado != null and session.usuarioLogueado.idtipousua == 1}">
+					<a class="nav-link" th:href="@{/usuarios/cargarusuarios}">Usuarios</a>
+				</li>
 			</ul>
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
@@ -31,11 +37,11 @@
 		<div class="row mb-3">
 			<div class="col-md-6">
 				<p><strong>Id Venta:</strong> <span th:text="${venta.idVenta}"></span></p>
-				<p><strong>Fecha:</strong> <span th:text="${#temporals.format(venta.fecha, 'dd/MM/yyyy HH:mm')}"></span></p>
+				<p><strong>Fecha:</strong> <span th:text="${#temporals.format(venta.fecha, 'dd/MM/yyyy HH:mm')}"></span>
+				</p>
 			</div>
 			<div class="col-md-6">
-				<p><strong>Cliente:</strong> <span
-						th:text="${venta.nroDocCli}"></span></p>
+				<p><strong>Cliente:</strong> <span th:text="${venta.nroDocCli}"></span></p>
 				<p><strong>Subtotal:</strong> <span
 						th:text="${'S/ ' + #numbers.formatDecimal(venta.subtotal,1,'COMMA',2,'POINT')}"></span></p>
 				<p><strong>IGV:</strong> <span
@@ -46,7 +52,7 @@
 		</div>
 
 		<!-- Formulario para agregar productos -->
-		<div class="row mb-4">
+		<div th:if="${session.usuarioLogueado != null and session.usuarioLogueado.idtipousua == 2}" class="row mb-4">
 			<div class="col-md-12">
 				<div class="card p-3 border-0 shadow-sm">
 					<div class="card-body">
@@ -63,7 +69,7 @@
 								<select th:field="*{id_prod}" class="form-control" required>
 									<option value="" disabled selected>-- Seleccione un producto --</option>
 									<option th:each="p : ${lstProductos}" th:value="${p.id_prod}"
-										th:text="${p.des_prod}"></option>
+										th:text="${p.desProd}"></option>
 								</select>
 							</div>
 
@@ -101,14 +107,16 @@
 					<tbody>
 						<tr th:each="d : ${lstDetalles}">
 							<td th:text="${d.idDetalle}"></td>
-							<td th:text="${d.obj_prod != null ? d.obj_prod.des_prod : '---'}"></td>
+							<td th:text="${d.objProd != null ? d.objProd.desProd : '---'}"></td>
 							<td th:text="${d.cantidad}"></td>
 							<td th:text="${'S/ ' + #numbers.formatDecimal(d.precio_unitario,1,'COMMA',2,'POINT')}"></td>
 							<td th:text="${'S/ ' + #numbers.formatDecimal(d.subtotal,1,'COMMA',2,'POINT')}"></td>
 							<td>
-								<a th:href="@{/ventas/detalle/editar/}+${d.idDetalle}" 
-								class="btn btn-warning btn-sm mr-1">Editar</a>		
-								<a th:href="@{/ventas/detalle/eliminar} + ${d.idDetalle}"
+								<a th:if="${session.usuarioLogueado != null and session.usuarioLogueado.idtipousua == 2}"
+									th:href="@{/ventas/detalle/editar/}+${d.idDetalle}"
+									class="btn btn-warning btn-sm mr-1">Editar</a>
+								<a th:if="${session.usuarioLogueado != null and session.usuarioLogueado.idtipousua == 2}"
+									th:href="@{/ventas/detalle/eliminar/} + ${d.idDetalle}"
 									class="btn btn-danger btn-sm">Eliminar</a>
 							</td>
 						</tr>
@@ -116,7 +124,8 @@
 				</table>
 			</div>
 		</div>
-
+		<p th:text="${error}" class="text-danger"></p>
+		<p th:text="${mensaje}" class="text-danger"></p>
 		<!-- Botón volver -->
 		<div class="row mt-3">
 			<div class="col-md-12">

@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.RequestParam;
 import com.cafeteria.model.Cliente;
+import com.cafeteria.model.Usuario;
 import com.cafeteria.repository.IClienteRepository;
 import com.cafeteria.repository.ITipoDocRepository;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/clientes") //ruta
@@ -27,9 +29,6 @@ public class ClienteController{
 	public String ListarCliente(Model model) {
 		//enviar el listado de los Clientes
 		model.addAttribute("lstClientes",repoCli.findAll());
-		System.out.println("========== CLIENTES ENCONTRADOS ==========");
-		System.out.println(repoCli);
-		System.out.println("==========================================");
 		return "listarclientes"; // nombre del recurso 
 	}
 	
@@ -76,4 +75,17 @@ public class ClienteController{
 				
 		return "redirect:/clientes/cargarclientes";
 	}
+	
+	//Buscar cliente por numero de documento
+	@GetMapping("/buscar")
+    public String buscarCliente(@RequestParam("txtNroDocCli") String nroDocCli, Model model) {
+		Cliente cliente = repoCli.findByNroDocCli(nroDocCli);
+        if (cliente != null) {
+            model.addAttribute("lstClientes", java.util.List.of(cliente));
+        } else {
+            model.addAttribute("mensaje", "No se encontró ningún cliente con ese número de documento.");
+        }
+
+        return "listarclientes";
+    }
 }

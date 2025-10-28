@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.cafeteria.model.Cliente;
 @Repository
 public interface IClienteRepository extends JpaRepository<Cliente, Integer>{
-
+	Cliente findByNroDocCli (String nroDocCli);
+	
 }

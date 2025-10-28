@@ -12,10 +12,16 @@
 		<a class="navbar-brand" href="#">Cafetería</a>
 		<div class="collapse navbar-collapse">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item"><a class="nav-link" th:href="@{/home}">Inicio</a></li>
+				<li class="nav-item"><a class="nav-link"
+						th:href="${session.usuarioLogueado.idtipousua == 1} ? @{/admin/home} : @{/vend/home}">Inicio</a>
+				</li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/clientes/cargarclientes}">Clientes</a></li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/productos/cargarproductos}">Productos</a></li>
-				<li class="nav-item"><a class="nav-link" th:href="@{/ventas/nuevo}">Ventas</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/ventas/cargarventas}">Ventas</a></li>
+				<li class="nav-item"
+					th:if="${session.usuarioLogueado != null and session.usuarioLogueado.idtipousua == 1}">
+					<a class="nav-link" th:href="@{/usuarios/cargarusuarios}">Usuarios</a>
+				</li>
 			</ul>
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
@@ -27,7 +33,24 @@
 
 	<div class="container mt-4">
 		<h2>Lista de ventas</h2>
-		<a th:href="@{/ventas/nuevo}" class="btn btn-primary mb-2">Agregar nueva venta</a>
+		<div class="mb-3">
+			<a th:if="${session.usuarioLogueado != null and session.usuarioLogueado.idtipousua == 2}"
+				th:href="@{/ventas/nuevo}" class="btn btn-primary mb-2">Agregar nueva venta</a>
+			<a th:href="${session.usuarioLogueado.idtipousua == 1} ? @{/admin/home} : @{/vend/home}"
+			   class="btn btn-secondary">Volver</a>
+		</div>
+		<form th:action="@{/ventas/buscar}" method="get" class="row g-3 mb-4">
+			<div class="col-md-4">
+				<label for="fecha" class="form-label">Buscar por fecha:</label>
+				<input type="date" id="fecha" name="fecha" class="form-control" th:value="${fechaBuscada}" required>
+			</div>
+			<div class="col-md-2 align-self-end">
+				<button type="submit" class="btn btn-primary w-100">Buscar</button>
+			</div>
+			<div class="col-md-2 align-self-end">
+				<a th:href="@{/ventas/cargarventas}" class="btn btn-secondary w-100">Ver todo</a>
+			</div>
+		</form>
 		<div class="row">
 			<div class="col-12 col-sm-12">
 				<table class="table table-bordered">
@@ -52,7 +75,8 @@
 							<td th:text="${'S/'} + ${#numbers.formatDecimal(v.total,1,'COMMA',2,'POINT')}"></td>
 							<td>
 								<a th:href="@{/ventas/detalle/}+${v.idVenta}" class="btn btn-info btn-sm">Detalle</a>
-								<a th:href="@{/ventas/eliminar/}+${v.idVenta}"
+								<a th:if="${session.usuarioLogueado != null and session.usuarioLogueado.idtipousua == 2}"
+									th:href="@{/ventas/eliminar/}+${v.idVenta}"
 									class="btn btn-danger btn-sm">Eliminar</a>
 							</td>
 						</tr>
@@ -60,6 +84,8 @@
 				</table>
 			</div>
 		</div>
+		<p th:text="${error}" class="text-danger"></p>
+		<p th:text="${mensaje}" class="text-danger"></p>
 	</div>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>

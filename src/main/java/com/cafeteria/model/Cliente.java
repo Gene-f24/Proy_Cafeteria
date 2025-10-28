@@ -13,10 +13,11 @@ public class Cliente {
     private int idCli;
     private String nom_cli;
     private int id_tipodoc;
-    private String nro_doc_cli;
+    @Column(name="nro_doc_cli")
+    private String nroDocCli ;
     //est
     @ManyToOne
     @JoinColumn(name = "id_tipodoc",
       insertable = false, updatable = false)
-    private TipoDoc obj_tipodoc;   
+    private TipoDoc objTipoDoc;   
 }

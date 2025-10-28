@@ -12,17 +12,35 @@
 		<a class="navbar-brand" href="#">Cafetería</a>
 		<div class="collapse navbar-collapse">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item"><a class="nav-link" th:href="@{/home}">Inicio</a></li>
+				<li class="nav-item"><a class="nav-link"
+						th:href="${session.usuarioLogueado.idtipousua == 1} ? @{/admin/home} : @{/vend/home}">Inicio</a>
+				</li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/clientes/cargarclientes}">Clientes</a></li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/productos/cargarproductos}">Productos</a></li>
-				<li class="nav-item"><a class="nav-link" th:href="@{/ventas/nuevo}">Ventas</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/ventas/cargarventas}">Ventas</a></li>
+				<li class="nav-item"
+					th:if="${session.usuarioLogueado != null and session.usuarioLogueado.idtipousua == 1}">
+					<a class="nav-link" th:href="@{/usuarios/cargarusuarios}">Usuarios</a>
+				</li>
 			</ul>
 		</div>
 	</nav>
 	<div class="container mt-2">
 		<h4>Lista de Productos</h4><br>
-		<a th:href="@{/productos/nuevo}" class="btn btn-primary">Agregar nuevo producto</a>
-		<a th:href="@{/home}" class="btn btn-secondary">Volver</a>
+		<div class="mb-3">
+			<a th:href="@{/productos/nuevo}" class="btn btn-primary">Agregar nuevo producto</a>
+			<a th:href="${session.usuarioLogueado.idtipousua == 1} ? @{/admin/home} : @{/vend/home}"
+				class="btn btn-secondary">Volver</a>
+		</div>
+
+		<form th:action="@{/productos/buscar}" method="get" class="form-inline mb-4">
+			<div class="d-flex flex-wrap gap-2">
+				<input type="text" name="txtProducto" class="form-control" style="width: 280px;"
+					placeholder="Buscar por nombre o categoria" required>
+				<button type="submit" class="btn btn-success">Buscar</button>
+				<a th:href="@{/productos/cargarproductos}" class="btn btn-secondary ml-2">Mostrar todos</a>
+			</div>
+		</form>
 		<div class="row">
 			<div class="col-6 col-sm-7">
 				<h3></h3>
@@ -45,11 +63,11 @@
 								<img th:src="@{/img/productos/} +${p.id_prod} + @{.png}" width="80px" height="80px"
 									class="rounded-circle" alt="imagen del producto">
 							</th>
-							<td th:text="${p.des_prod}">xx</td>
+							<td th:text="${p.desProd}">xx</td>
 							<td th:text="${'S/'} + 
 							${#numbers.formatDecimal(p.pre_prod,1,'COMMA',2,'POINT')}">xx</td>
 							<td th:text="${p.stk_prod}">xx</td>
-							<td th:text="${p.obj_cat.des_categ}">xx</td>
+							<td th:text="${p.objCat.desCateg}">xx</td>
 							<td class="d-flex justify-content-center">
 								<a th:href="@{/productos/editar/}+${p.id_prod}" class="btn btn-warning btn-sm mr-1">
 									Editar</a>
@@ -62,6 +80,7 @@
 				</table>
 			</div>
 		</div>
+		<p th:text="${mensaje}" class="text-danger"></p>
 	</div>
 </body>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>

@@ -12,10 +12,16 @@
 		<a class="navbar-brand" href="#">Cafetería</a>
 		<div class="collapse navbar-collapse">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item"><a class="nav-link" th:href="@{/home}">Inicio</a></li>
+				<li class="nav-item"><a class="nav-link"
+						th:href="${session.usuarioLogueado.idtipousua == 1} ? @{/admin/home} : @{/vend/home}">Inicio</a>
+				</li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/clientes/cargarclientes}">Clientes</a></li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/productos/cargarproductos}">Productos</a></li>
-				<li class="nav-item"><a class="nav-link" th:href="@{/ventas/nuevo}">Ventas</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/ventas/cargarventas}">Ventas</a></li>
+				<li class="nav-item"
+					th:if="${session.usuarioLogueado != null and session.usuarioLogueado.idtipousua == 1}">
+					<a class="nav-link" th:href="@{/usuarios/cargarusuarios}">Usuarios</a>
+				</li>
 			</ul>
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
@@ -27,8 +33,19 @@
 
 	<div class="container mt-2"> <br>
 		<h4>Lista de Clientes Registrados</h4><br>
-		<a th:href="@{/clientes/nuevo}" class="btn btn-primary">Agregar nuevo cliente</a>
-		<a th:href="@{/home}" class="btn btn-secondary">Volver</a>
+		<div class="mb-3">
+			<a th:href="@{/clientes/nuevo}" class="btn btn-primary me-2">Agregar nuevo cliente</a>
+			<a th:href="${session.usuarioLogueado.idtipousua == 1} ? @{/admin/home} : @{/vend/home}"
+				class="btn btn-secondary">Volver</a>
+		</div>
+
+		<form th:action="@{/clientes/buscar}" method="get" class="form-inline mb-4">
+			<div class="d-flex flex-wrap gap-2">
+				<input type="text" name="txtNroDocCli" class="form-control" placeholder="Buscar por DNI" required>
+				<button type="submit" class="btn btn-success">Buscar</button>
+				<a th:href="@{/clientes/cargarclientes}" class="btn btn-secondary ml-2">Mostrar todos</a>
+			</div>
+		</form>
 		<div class="row">
 			<div class="col-6 col-sm-7">
 				<h3></h3>
@@ -50,8 +67,8 @@
 									class="rounded-circle" alt="imagen del cliente">
 							</th>
 							<td th:text="${c.nom_cli}">xx</td>
-							<td th:text="${c.nro_doc_cli}">xx</td>
-							<td th:text="${c.obj_tipodoc.nom_tipodoc}">xx</td>
+							<td th:text="${c.nroDocCli}">xx</td>
+							<td th:text="${c.objTipoDoc.nom_tipodoc}">xx</td>
 							<td class="d-flex justify-content-center">
 								<a th:href="@{/clientes/editar/}+${c.idCli}"
 									class="btn btn-warning btn-sm mr-1">Editar</a>
@@ -64,6 +81,7 @@
 				</table>
 			</div>
 		</div>
+		<p th:text="${mensaje}" class="text-danger"></p>
 	</div>
 	</div>
 	</div>

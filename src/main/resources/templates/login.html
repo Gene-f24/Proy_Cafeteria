@@ -89,28 +89,29 @@
   </style>
 </head>
 <body>
-  <div class="login-container">
-    <h1>Acceso al Sistema</h1>
-    <form action="/login" method="post">
-      <div class="mb-3">
-        <label for="" class="form-label">Usuario</label>
-        <input type="email" name="txtUsuario" class="form-control" id="">
-      </div>
-      <div class="mb-3">
-        <label for="" class="form-label">Contraseña</label>
-        <input type="password" name="txtClave" class="form-control" id="">
-      </div>
-      <div class="mb-3">
-        <button type="submit" class="btn btn-primary">Ingresar</button>
-      </div>
-      <div class="mb-3">
-        <p>Para registrar su cuenta, pulse <a th:href="@{/registro/cargarregistro}">aquí</a></p>
-      </div>
-      <div role="alert" th:class="${cssmensaje}" th:text="${mensaje}"></div>
-      <br>
-    </form>
-  </div>
+	<div class="login-container">
+		<h1>Acceso al Sistema</h1>
+		<form action="/login" method="post">
+			<div class="mb-3">
+				<label for="" class="form-label">Usuario</label>
+				<input type="email" name="txtUsuario" class="form-control" id="">
+			</div>
+			<div class="mb-3">
+				<label for="" class="form-label">Contraseña</label>
+				<input type="password" name="txtClave" class="form-control" id="">
+			</div>
+			<div class="mb-3">
+				<button type="submit" class="btn btn-primary">Ingresar</button>
+			</div>
+			<div class="mb-3">
+				<p>Para registrar su cuenta, pulse <a th:href="@{/registro/cargarregistro}">aquí</a></p>
+			</div>
+			<div role="alert" th:class="${cssmensaje}" th:text="${mensaje}"></div>
+			<br>
+		</form>
+	</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

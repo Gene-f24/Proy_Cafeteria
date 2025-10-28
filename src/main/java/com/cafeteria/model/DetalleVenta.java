@@ -33,7 +33,7 @@ public class DetalleVenta {
 
 	    @ManyToOne
 	    @JoinColumn(name = "id_prod", insertable = false, updatable = false)
-	    private Producto obj_prod;
+	    private Producto objProd;
 	    //est
 	
 	  

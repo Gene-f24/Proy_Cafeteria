@@ -10,8 +10,9 @@ public class Producto {
     @Id 
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id_prod;
-    private String des_prod;
-    private String stk_prod;
+    @Column(name="des_prod")
+    private String desProd;
+    private int stk_prod;
     private Double pre_prod;
     private int id_categ;
     //est
@@ -19,5 +20,5 @@ public class Producto {
     @ManyToOne
     @JoinColumn(name="id_categ",
     	insertable = false, updatable = false)
-    private Categoria obj_cat;
+    private Categoria objCat;
 }

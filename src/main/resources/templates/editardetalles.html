@@ -12,10 +12,14 @@
 		<a class="navbar-brand" href="#">Cafetería</a>
 		<div class="collapse navbar-collapse">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item"><a class="nav-link" th:href="@{/home}">Inicio</a></li>
-				<li class="nav-item"><a class="nav-link" th:href="@{/clientes/cargarclientes}">Clientes</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="${session.usuarioLogueado.idtipousua == 1} ? @{/admin/home} : @{/vend/home}">Inicio</a></li>
+				<li class=" nav-item"><a class="nav-link" th:href="@{/clientes/cargarclientes}">Clientes</a></li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/productos/cargarproductos}">Productos</a></li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/ventas/cargarventas}">Ventas</a></li>
+				<li class="nav-item"
+					th:if="${session.usuarioLogueado != null and session.usuarioLogueado.idtipousua == 1}">
+					<a class="nav-link" th:href="@{/usuarios/cargarusuarios}">Usuarios</a>
+				</li>
 			</ul>
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
@@ -52,7 +56,7 @@
 								<select th:field="*{id_prod}" id="inputProducto" class="form-control" required>
 									<option value="-1">Seleccione un producto...</option>
 									<option th:each="p : ${lstProductos}" th:value="${p.id_prod}"
-										th:text="${p.des_prod}"></option>
+										th:text="${p.desProd}"></option>
 								</select>
 							</div>
 

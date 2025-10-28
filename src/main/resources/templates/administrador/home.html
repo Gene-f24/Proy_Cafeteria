@@ -13,10 +13,11 @@
 
 		<div class="collapse navbar-collapse">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item"><a class="nav-link" th:href="@{/home}">Inicio</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/admin/home}">Inicio</a></li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/clientes/cargarclientes}">Clientes</a></li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/productos/cargarproductos}">Productos</a></li>
-				<li class="nav-item"><a class="nav-link" th:href="@{/ventas/nuevo}">Ventas</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/ventas/cargarventas}">Ventas</a></li>
+				<li class="nav-item active"><a class="nav-link" th:href="@{/usuarios/cargarusuarios}">Usuarios</a></li>
 			</ul>
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
@@ -27,16 +28,25 @@
 	</nav>
 
 	<div class="container text-center mt-5">
-		<h2>Bienvenido al Sistema de Cafetería</h2>
+		<h2 th:text="'¡Bienvenido, ' + ${session.usuarioLogueado.nom_usua} + '!'"></h2>
 		<p class="lead">Seleccione una opción para continuar</p>
 
 		<div class="row justify-content-center mt-4">
 			<div class="col-md-3">
 				<div class="card">
 					<div class="card-body">
+						<h5 class="card-title">Usuarios</h5>
+						<p class="card-text">Gestione los usuarios registrados.</p>
+						<a th:href="@{/usuarios/cargarusuarios}" class="btn btn-danger">Ir a Usuarios</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="card">
+					<div class="card-body">
 						<h5 class="card-title">Clientes</h5>
 						<p class="card-text">Gestione los clientes registrados.</p>
-						<a th:href="@{/clientes/cargarclientes}" class="btn btn-primary">Ir a Clientes</a>
+						<a th:if="${session.usuarioLogueado != null}" th:href="@{/clientes/cargarclientes}" class="btn btn-primary">Ir a Clientes</a>
 					</div>
 				</div>
 			</div>
@@ -46,7 +56,7 @@
 					<div class="card-body">
 						<h5 class="card-title">Productos</h5>
 						<p class="card-text">Administre los productos disponibles.</p>
-						<a th:href="@{/productos/cargarproductos}" class="btn btn-success">Ir a Productos</a>
+						<a th:if="${session.usuarioLogueado != null}" th:href="@{/productos/cargarproductos}" class="btn btn-success">Ir a Productos</a>
 					</div>
 				</div>
 			</div>
@@ -56,7 +66,7 @@
 					<div class="card-body">
 						<h5 class="card-title">Ventas</h5>
 						<p class="card-text">Registre y consulte las ventas realizadas.</p>
-						<a th:href="@{/ventas/nuevo}" class="btn btn-warning">Ir a Ventas</a>
+						<a th:if="${session.usuarioLogueado != null}" th:href="@{/ventas/cargarventas}" class="btn btn-warning">Ir a Ventas</a>
 					</div>
 				</div>
 			</div>

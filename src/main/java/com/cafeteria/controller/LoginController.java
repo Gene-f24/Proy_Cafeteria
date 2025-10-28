@@ -25,22 +25,26 @@ public class LoginController {
 		
 	    @GetMapping("/login")
 	    public String mostrarLogin() {
-	        return "login"; // busca en templates/login.html
+	        return "login"; // muestra el login
 	    }
 	    
 	    @PostMapping("/login")
 	    public String validarLogin(@RequestParam("txtUsuario") String correo, 
 	                               @RequestParam("txtClave") String clave, Model model, HttpSession session) {
 	    	
-	    	//Obtener un Usuario y su Clave, validando si existe
+	    	//Validar Usuario
 	    	Usuario u = repoUsu.findByCorreoAndClave(correo, clave);
 	        if(u != null) {//si existe
 	        	// Guarda el usuario en la sesión
 	            session.setAttribute("usuarioLogueado", u);
-
-	        	return "redirect:/home";
+	            // segun el tipo de usuario guarda la URL y redirige 
+	            if (u.getIdtipousua() == 1) {
+	                return "redirect:/admin/home";
+	            }else {
+	                return  "redirect:/vend/home";
+	            }
 	        }else {
-	        	model.addAttribute("mensaje", "usuario o clave incorrecto");
+	        	model.addAttribute("mensaje", "usuario o clave incorrectos");
 	        	model.addAttribute("cssmensaje", "alert alert-danger");
 	        	return "login";
 	        }

@@ -88,44 +88,46 @@
     }
   </style>
 </head>
+
 <body>
-  <div class="register-container">
-    <h1>Registro de Cuenta</h1>
-    <form th:action="@{/registro/guardar}" th:object="${usuarios}" method="post">
-      <div class="mb-3">
-        <label for="nombre" class="form-label">Nombre</label>
-        <input type="text" th:field="*{nom_usua}" class="form-control" id="nombre" required>
-      </div>
+	<div class="register-container">
+		<h1>Registro de Cuenta</h1>
+		<form th:action="@{/registro/guardar}" th:object="${usuarios}" method="post">
+			<div class="mb-3">
+				<label for="nombre" class="form-label">Nombre</label>
+				<input type="text" th:field="*{nom_usua}" class="form-control" id="nombre" required>
+			</div>
 
-      <div class="mb-3">
-        <label for="apellido" class="form-label">Apellido</label>
-        <input type="text" th:field="*{ape_usua}" class="form-control" id="apellido" required>
-      </div>
+			<div class="mb-3">
+				<label for="apellido" class="form-label">Apellido</label>
+				<input type="text" th:field="*{ape_usua}" class="form-control" id="apellido" required>
+			</div>
 
-      <div class="mb-3">
-        <label for="correo" class="form-label">Usuario</label>
-        <input type="email" th:field="*{correo}" class="form-control" id="correo" required>
-      </div>
+			<div class="mb-3">
+				<label for="correo" class="form-label">Usuario</label>
+				<input type="email" th:field="*{correo}" class="form-control" id="correo" required>
+			</div>
 
-      <div class="mb-3">
-        <label for="clave" class="form-label">Contraseña</label>
-        <input type="password" th:field="*{clave}" class="form-control" id="clave" required>
-      </div>
-	  
-	  <input type="hidden" th:field="*{idtipousua}" value="2">
+			<div class="mb-3">
+				<label for="clave" class="form-label">Contraseña</label>
+				<input type="password" th:field="*{clave}" class="form-control" id="clave" required>
+			</div>
 
-      <div class="mb-3">
-        <button type="submit" class="btn btn-primary">Registrar</button>
-      </div>
+			<input type="hidden" th:field="*{idtipousua}" value="2">
 
-      <div class="mb-3">
-        <p>¿Ya tienes una cuenta? <a href="/login">Inicia sesión aquí</a></p>
-      </div>
+			<div class="mb-3">
+				<button type="submit" class="btn btn-primary">Registrar</button>
+			</div>
 
-      <div role="alert" th:class="${cssmensaje}" th:text="${mensaje}"></div>
-    </form>
-  </div>
+			<div class="mb-3">
+				<p>¿Ya tienes una cuenta? <a href="/login">Inicia sesión aquí</a></p>
+			</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+			<div role="alert" th:class="${cssmensaje}" th:text="${mensaje}"></div>
+		</form>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

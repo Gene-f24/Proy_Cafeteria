@@ -12,7 +12,7 @@
 		<a class="navbar-brand" href="#">Cafetería</a>
 		<div class="collapse navbar-collapse">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item"><a class="nav-link" th:href="@{/home}">Inicio</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/vend/home}">Inicio</a></li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/clientes/cargarclientes}">Clientes</a></li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/productos/cargarproductos}">Productos</a></li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/ventas/nuevo}">Ventas</a></li>
@@ -34,7 +34,7 @@
 			</div>
 			<button type="submit" class="btn btn-success">Crear Venta</button>
 			<a th:href="@{/ventas/cargarventas}" class="btn btn-primary">Listar</a>
-			<a th:href="@{/home}" class="btn btn-secondary">Volver</a>
+			<a th:href="@{/vend/home}" class="btn btn-secondary">Volver</a>
 		</form>
 	</div>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>

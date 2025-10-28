@@ -1,5 +1,7 @@
 package com.cafeteria.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,10 +10,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.RequestParam;
 import com.cafeteria.model.Producto;
+import com.cafeteria.model.Usuario;
 import com.cafeteria.repository.ICategoriaRepository;
 import com.cafeteria.repository.IProductoRepository;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/productos") //ruta
@@ -77,4 +81,18 @@ public class ProductoController {
 		return "redirect:/productos/cargarproductos";
 	}
 	
+	// Buscar por descripción o categoría
+	@GetMapping("/buscar")
+	public String buscarProductos(@RequestParam("txtProducto") String descripcion, Model model,HttpSession session) {
+		 Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
+    	 model.addAttribute("usuario", u); 
+    	 
+		List<Producto> productos = repoProd.findByDesProdContainingIgnoreCaseOrObjCat_DesCategContainingIgnoreCase(descripcion, descripcion);
+	    model.addAttribute("lstProductos", productos);
+	    model.addAttribute("descripcion", descripcion);
+	    if (productos.isEmpty()) {
+	        model.addAttribute("mensaje", "No se encontraron productos.");
+	    }
+	    return "listarproductos";
+	}	
 }
