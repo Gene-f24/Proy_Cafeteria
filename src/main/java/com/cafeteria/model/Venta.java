@@ -49,5 +49,7 @@ public class Venta {
             fecha = LocalDateTime.now();
         }
     }
+    
+    
 
 }

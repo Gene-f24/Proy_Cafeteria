@@ -29,18 +29,19 @@
 		<h4>Lista de Productos</h4><br>
 		<div class="mb-3">
 			<a th:href="@{/productos/nuevo}" class="btn btn-primary">Agregar nuevo producto</a>
-			<a th:href="${session.usuarioLogueado.idtipousua == 1} ? @{/admin/home} : @{/vend/home}"
-				class="btn btn-secondary">Volver</a>
-		</div>
-
-		<form th:action="@{/productos/buscar}" method="get" class="form-inline mb-4">
-			<div class="d-flex flex-wrap gap-2">
-				<input type="text" name="txtProducto" class="form-control" style="width: 280px;"
-					placeholder="Buscar por nombre o categoria" required>
-				<button type="submit" class="btn btn-success">Buscar</button>
-				<a th:href="@{/productos/cargarproductos}" class="btn btn-secondary ml-2">Mostrar todos</a>
+			
+			<!-- Reemplazamos el ternario por th:if/th:unless -->
+			<a th:if="${session.usuarioLogueado.idtipousua == 1}" th:href="@{/admin/home}" class="btn btn-secondary">Volver</a>
+			<a th:unless="${session.usuarioLogueado.idtipousua == 1}" th:href="@{/vend/home}" class="btn btn-secondary">Volver</a>
 			</div>
-		</form>
+			<form th:action="@{/productos/buscar}" method="get" class="form-inline mb-4">
+				<div class="form-group mr-2">
+					<input type="text" name="txtProducto" class="form-control" style="width: 280px;"
+						placeholder="Buscar por nombre o categoria" required>
+				</div>
+				<button type="submit" class="btn btn-success mr-2">Buscar</button>
+				<a th:href="@{/productos/cargarproductos}" class="btn btn-secondary">Mostrar todos</a>
+			</form>
 		<div class="row">
 			<div class="col-6 col-sm-7">
 				<h3></h3>
@@ -80,6 +81,7 @@
 				</table>
 			</div>
 		</div>
+		
 		<p th:text="${mensaje}" class="text-danger"></p>
 	</div>
 </body>

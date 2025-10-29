@@ -1,23 +1,43 @@
 package com.cafeteria.controller;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.cafeteria.model.Categoria;
 import com.cafeteria.model.DetalleVenta;
 import com.cafeteria.model.Producto;
 import com.cafeteria.model.Venta;
+import com.cafeteria.repository.ICategoriaRepository;
 import com.cafeteria.repository.IDetalleVentaRepository;
 import com.cafeteria.repository.IProductoRepository;
 import com.cafeteria.repository.IVentaRepository;
 
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 
 @Controller
 @RequestMapping("/ventas")
@@ -31,17 +51,23 @@ public class VentaController {
 
     @Autowired
     private IDetalleVentaRepository repoDet;
+    
+    @Autowired
+    private ICategoriaRepository repoCat;
 
     //VENTA
     
     // LISTAR TODAS LAS VENTAS
     @GetMapping("/cargarventas")
-    public String ListarVenta(Model model) {
+    public String ListarVenta(Model model, HttpSession session) {
+    
+    	if (session.getAttribute("usuarioLogueado") == null) {
+    	    return "redirect:/login";
+    	}
         // Se envía a la vista la lista de todas las ventas
         model.addAttribute("lstVentas", repoVenta.findAll());
         return "listarventas"; // vista que muestra la lista
     }
-
 
     // FORMULARIO PARA CREAR NUEVA VENTA
     @GetMapping("/nuevo")
@@ -104,7 +130,6 @@ public class VentaController {
         model.addAttribute("lstProductos", repoProd.findAll());
         return "detalleventa";
     }
-
 
 
     // AGREGAR PRODUCTO AL DETALLE DE VENTA
@@ -261,4 +286,107 @@ public class VentaController {
             repoVenta.save(venta);
         }
     }
+    
+    
+    @Autowired
+	private DataSource dataSource; // javax.sql
+
+	@Autowired
+	private ResourceLoader resourceLoader; // core.io
+	
+	
+	// GRAFICO
+	@GetMapping("/graficos")
+	public void reportesGraficos(HttpServletResponse response) {
+	    // opción 1
+	    // response.setHeader("Content-Disposition", "attachment; filename=\"reporte.pdf\";");
+	    // opción 2
+	    response.setHeader("Content-Disposition", "inline;");
+	    
+	    response.setContentType("application/pdf");
+	    try {
+	        String ru = resourceLoader.getResource("classpath:static/grafico2.jasper").getURI().getPath();
+	        JasperPrint jasperPrint = JasperFillManager.fillReport(ru, null, dataSource.getConnection());
+	        OutputStream outStream = response.getOutputStream();
+	        JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	//REPORTE CIRCULAR
+	@GetMapping("/reportecircular")
+	public void reportesCircular(HttpServletResponse response) {
+	    // opción 1
+	    // response.setHeader("Content-Disposition", "attachment; filename=\"reporte.pdf\";");
+	    // opción 2
+	    response.setHeader("Content-Disposition", "inline;");
+	    
+	    response.setContentType("application/pdf");
+	    try {
+	        String ru = resourceLoader.getResource("classpath:static/reporte2.jasper").getURI().getPath();
+	        JasperPrint jasperPrint = JasperFillManager.fillReport(ru, null, dataSource.getConnection());
+	        OutputStream outStream = response.getOutputStream();
+	        JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	// FILTRO
+	@GetMapping("/filtro")
+	public String mostrarFiltro(Model model) {
+	    model.addAttribute("producto", new Producto());
+	    model.addAttribute("lstCategorias", repoCat.findAll());
+	    return "filtroReporte"; 
+	}
+	
+	@PostMapping("/grabarfiltro")
+	public void grabarFiltro(@RequestParam String categoria,
+	                         HttpServletResponse response) {
+	    response.setHeader("Content-Disposition", "inline;");
+	    response.setContentType("application/pdf");
+
+	    try {
+	        // Cargar el .jasper desde resources
+	        Resource resource = resourceLoader.getResource("classpath:static/filtro.jasper");
+
+	        if (!resource.exists()) {
+	            throw new FileNotFoundException("El archivo Jasper no se encontró en resources: filtro.jasper");
+	        }
+
+	        // Obtener el InputStream del reporte
+	        InputStream jasperStream = resource.getInputStream();
+
+	        // Parámetros que se enviarán al reporte
+	        Map<String, Object> params = new HashMap<>();
+	        params.put("categoria", categoria); // Debe coincidir con el nombre del parámetro en Jasper
+
+	        // Conexión a la base de datos
+	        try (Connection con = dataSource.getConnection()) {
+	            // Llenar el reporte con los datos
+	            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperStream, params, con);
+
+	            // Exportar el PDF directamente al navegador
+	            try (OutputStream outStream = response.getOutputStream()) {
+	                JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
+	                outStream.flush();
+	            }
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        try {
+	            response.setContentType("text/plain");
+	            response.getWriter().write("Error al generar el reporte: " + e.getMessage());
+	        } catch (IOException ioException) {
+	            ioException.printStackTrace();
+	        }
+	    }
+	}
+
+
 }
+
+	
+
